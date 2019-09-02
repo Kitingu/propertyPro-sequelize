@@ -1,0 +1,23 @@
+{
+    "development": {
+        "username": "benlegendj",
+        "password": "password",
+        "database": "pro-sequelize",
+        "host": "127.0.0.1",
+        "dialect": "postgres"
+    },
+    "test": {
+        "username": "benlegendj",
+        "password": "password",
+        "database": "pro-test",
+        "host": "127.0.0.1",
+        "dialect": "postgres"
+    },
+    "production": {
+        "username": "benlegendj",
+        "password": "password",
+        "database": "pro-sequelize",
+        "host": "127.0.0.1",
+        "dialect": "postgres"
+    }
+}
