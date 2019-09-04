@@ -27,5 +27,13 @@ class PropertyServices {
       }
     });
   }
+  static async updateProperty(id, field, value) {
+    await db.Property.update(
+      {
+        [field]: value
+      },
+      { where: { id } }
+    );
+  }
 }
 export default PropertyServices;

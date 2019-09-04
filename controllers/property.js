@@ -12,12 +12,15 @@ const propertyController = {
     const ownerPhoneNumber = req.user.phoneNumber;
     console.log(ownerPhoneNumber);
 
-
     try {
       const image_url = req.file.url;
 
       const property = await Property.create({
-          state, city, type, price, address,
+        state,
+        city,
+        type,
+        price,
+        address,
         owner: ownerEmail,
         ownerPhoneNumber,
         image_url
@@ -30,7 +33,8 @@ const propertyController = {
       return userResponse.send(res);
     } catch (error) {
       userResponse.setError(
-        400,error
+        400,
+        error
         // "please provide an image of type png, gif or jpg"
       );
       return userResponse.send(res);
@@ -77,7 +81,7 @@ const propertyController = {
   },
   async getSpecificAdvert(req, res) {
     const { id } = req.params;
-      const property = await PropertyServices.getPropertyByField(
+    const property = await PropertyServices.getPropertyByField(
       "id",
       parseInt(id)
     );
@@ -95,7 +99,7 @@ const propertyController = {
   },
   async deleteProperty(req, res) {
     const { id } = req.params;
-      const property = await PropertyServices.getPropertyByField(
+    const property = await PropertyServices.getPropertyByField(
       "id",
       parseInt(id)
     );
@@ -118,8 +122,8 @@ const propertyController = {
   },
   async changeStatus(req, res) {
     const { id } = req.params;
-    let property = await Property.getPropertyByField(
-      "propertyid",
+    let property = await PropertyServices.getPropertyByField(
+      "id",
       parseInt(id)
     );
 
@@ -129,7 +133,7 @@ const propertyController = {
           userResponse.setError(400, "property is already sold");
           return userResponse.send(res);
         }
-        property = await Property.update("status", property.propertyid, "sold");
+        property = await PropertyServices.updateProperty(id,"status", "sold");
         userResponse.setSuccess(
           200,
           "property advert updated successfully",
@@ -150,8 +154,8 @@ const propertyController = {
   },
   async updatePrice(req, res) {
     const { id } = req.params;
-    let property = await Property.getPropertyByField(
-      "propertyid",
+    let property = await PropertyServices.getPropertyByField(
+      "id",
       parseInt(id)
     );
     const { price } = req.body;
@@ -162,7 +166,7 @@ const propertyController = {
         return userResponse.send(res);
       }
       if (checkOwner(req, property)) {
-        property = await Property.update("price", id, price);
+        property = await PropertyServices.updateProperty(id, "price", price);
         userResponse.setSuccess(
           "200",
           "Property updated successfully",
