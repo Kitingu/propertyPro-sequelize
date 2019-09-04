@@ -1,8 +1,9 @@
-export default ({ firstname, lastname, email, isAgent, isAdmin,token }) => ({
+export default ({ firstname, lastname, email, isAgent, isAdmin,phoneNumber,token }) => ({
   firstname,
   lastname,
   email,
   isAgent,
   isAdmin,
+  phoneNumber,
   token
 });

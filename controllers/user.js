@@ -1,6 +1,6 @@
 import db from "../models";
 import userProfile from "../helpers/userUtils";
-import UserServices from "../servces/user.js";
+import UserServices from "../services/user.js";
 import { Response, hashPassword, compareHash } from "../helpers/utils";
 import { encodeToken, createPayload } from "../helpers/jwt";
 
@@ -26,7 +26,7 @@ const userController = {
         });
         const token = encodeToken(
           createPayload(
-            newUser.firstname,
+            newUser.phoneNumber,
             newUser.email,
             newUser.isAgent,
             newUser.isAdmin
