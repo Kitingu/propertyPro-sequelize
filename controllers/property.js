@@ -1,17 +1,17 @@
-import dotenv from "dotenv";
 import db from "../models";
 import { checkOwner, Response } from "../helpers/utils";
 import PropertyServices from "../services/property";
+import FlagServices from "../services/flags";
 
+const Flags = db.Flags
 const Property = db.Property;
+
 const userResponse = new Response();
 const propertyController = {
   async createProperty(req, res) {
     const ownerEmail = req.user.email;
     const { state, city, type, price, address } = req.body;
     const ownerPhoneNumber = req.user.phoneNumber;
-    console.log(ownerPhoneNumber);
-
     try {
       const image_url = req.file.url;
 
@@ -34,8 +34,7 @@ const propertyController = {
     } catch (error) {
       userResponse.setError(
         400,
-        error
-        // "please provide an image of type png, gif or jpg"
+        "please provide an image of type png, gif or jpg"
       );
       return userResponse.send(res);
     }
@@ -43,7 +42,6 @@ const propertyController = {
 
   async getAll(req, res) {
     const allProperties = await Property.findAll();
-    // const types = ["two bedroom", "three bedroom", "bedsitter", "mini-flat"];
     const { type } = req.query;
 
     if (type) {
@@ -133,7 +131,7 @@ const propertyController = {
           userResponse.setError(400, "property is already sold");
           return userResponse.send(res);
         }
-        property = await PropertyServices.updateProperty(id,"status", "sold");
+        property = await PropertyServices.updateProperty(id, "status", "sold");
         userResponse.setSuccess(
           200,
           "property advert updated successfully",
@@ -187,11 +185,9 @@ const propertyController = {
   },
   async flagProperty(req, res) {
     const { id } = req.params;
-    const property = await Property.getPropertyByField(
-      "propertyid",
-      parseInt(id)
-    );
+    const property = await PropertyServices.getPropertyByField("id", parseInt(id));
     const { reason, description } = req.body;
+    const propertyId = id
 
     if (property) {
       if (checkOwner(req, property)) {
@@ -201,19 +197,16 @@ const propertyController = {
 
       const owner = req.user.email;
 
-      await Property.flagProperty(owner, id, reason, description);
+      await Flags.create({owner, propertyId, reason, description});
       userResponse.setSuccess("200", "Property flagged successfully");
       return userResponse.send(res);
     }
   },
   async getFlags(req, res) {
     const { id } = req.params;
-    const property = await Property.getPropertyByField(
-      "propertyid",
-      parseInt(id)
-    );
+    const property = await PropertyServices.getPropertyByField("id", parseInt(id));
     if (property) {
-      const flags = await Property.getFlags(id);
+      const flags = await FlagServices.findById(id);
       if (flags) {
         userResponse.setSuccess("200", "Available flags", flags);
         return userResponse.send(res);
@@ -225,4 +218,4 @@ const propertyController = {
     return userResponse.send(res);
   }
 };
-module.exports = propertyController;
+export default propertyController;
