@@ -5,7 +5,7 @@ services:
   - postgresql
 
 before_install:
-  - psql -c 'create database pro-test' -U postgres
+  - psql -c 'create database protestdb' -U postgres
 install:
   - npm i -g sequelize-cli
   - npm install
@@ -13,6 +13,6 @@ cache:
   directories:
     - "node_modules"
 script:
-  - npm run dev-test
+  - npm run test-dev
 after_success:
   - npm run coverage
