@@ -41,7 +41,7 @@ router
     checkIdType,
     verifyToken,
     checkAgent,
-    // Validate.priceUpdate,
+    Validate.priceUpdate,
     propertyController.updatePrice
   )
   .all(methodNotAllowed);

@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - node
+services:
+  - postgresql
+
+before_install:
+  - psql -c 'create database pro-test' -U postgres
+install:
+  - npm i -g sequelize-cli
+  - npm install
+cache:
+  directories:
+    - "node_modules"
+script:
+  - npm run dev-test
+after_success:
+  - npm run coverage
